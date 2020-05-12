@@ -32,7 +32,7 @@ test("sync error in worker returns rejected promise", async (t) => {
   );
 
   t.true(err instanceof Error);
-  t.is(err.message, "Test sync error");
+  t.is(err.message, "Sync error");
 });
 
 test("async error in worker returns rejected promise", async (t) => {
@@ -51,6 +51,15 @@ test("worker exited with code returns rejected promise", async (t) => {
 
   t.true(err instanceof Error);
   t.is(err.message, `Worker "${filename}" stopped with exit code 2`);
+});
+
+test("error in unwrapped worker returns rejected promise", async (t) => {
+  const err = await t.throwsAsync(() =>
+    queue()("./test/workers/throw-unwrapped-error.js")
+  );
+
+  t.true(err instanceof Error);
+  t.is(err.message, "Unwrapped error");
 });
 
 test("enqueue respects level of parallelism", async (t) => {
