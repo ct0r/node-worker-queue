@@ -35,29 +35,25 @@ const queue = ({ filename, parallelism = 1 } = {}) => {
 };
 
 function invoke(filename, args) {
-  try {
-    return new Promise((resolve, reject) => {
-      let error, result;
+  return new Promise((resolve, reject) => {
+    let error, result;
 
-      new Worker(filename, { workerData: JSON.stringify(args) })
-        .on("exit", (code) => {
-          if (code !== 0 && !error) {
-            error = new Error(
-              `Worker "${filename}" stopped with exit code ${code}`
-            );
-          }
+    new Worker(filename, { workerData: JSON.stringify(args) })
+      .on("exit", (code) => {
+        if (code !== 0 && !error) {
+          error = new Error(
+            `Worker "${filename}" stopped with exit code ${code}`
+          );
+        }
 
-          error ? reject(error) : resolve(result);
-        })
-        .on("error", (err) => (error = err))
-        .on("message", ({ type, data }) => {
-          if (type === "end") result = data;
-          if (type === "error") error = data;
-        });
-    });
-  } catch (err) {
-    return Promise.reject(err);
-  }
+        error ? reject(error) : resolve(result);
+      })
+      .on("error", (err) => (error = err))
+      .on("message", ({ type, data }) => {
+        if (type === "end") result = data;
+        if (type === "error") error = data;
+      });
+  });
 }
 
 async function work(fn) {

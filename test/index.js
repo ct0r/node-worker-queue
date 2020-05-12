@@ -66,13 +66,13 @@ test("enqueue respects level of parallelism", async (t) => {
   t.true(allPending);
 
   // TODO: Use worker thread sync primitives instead of timers
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   t.true(spies[0].calledOnce);
   t.true(spies[1].calledOnce);
   t.true(spies[2].notCalled);
 
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   t.true(spies[0].calledOnce);
   t.true(spies[1].calledOnce);
