@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-npm install @ct0r/promise-queue
+npm install @ct0r/worker-queue
 ```
 
 ## Usage
